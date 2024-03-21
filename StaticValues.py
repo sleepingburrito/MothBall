@@ -90,6 +90,7 @@ class PLAYER_ID(IntEnum):
     @staticmethod
     def _generate_next_value_(name, start, count, last_values):
         return count
+    #Should always be numerical starting from zero counting up with no gaps.
     ONE = auto()
     TWO = auto()
 
@@ -134,5 +135,14 @@ class INPUT_ID(IntEnum):
 #======================
 
 
+
 #graphics
 #======================
+SCREEN_WIDTH = GU_ROOM_WIDTH
+SCREEN_HEIGTH = GU_ROOM_HEIGHT
+
+DEBUG_BOX_COLOR = "red"
+DEBUG_BOX_WIDTH = 1
+DEBUG_SHADOW_COLOR = "blue"
+
+DEFAULT_BG_COLOR = "black"
