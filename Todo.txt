@@ -1,2 +1,3 @@
+work on physics
+test timers
 Test if the keys work (maybe set bg color depending on key and its state)
-Add master timer to GM

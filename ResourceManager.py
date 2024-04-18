@@ -2,6 +2,7 @@
 #You will typically only need one of these for the whole game.
 import pygame as Pg
 import PlayerInput as Pin
+import Timing as Tim
 
 class MainResourceManager:
 
@@ -12,6 +13,9 @@ class MainResourceManager:
     def __init__(self) -> None:
         #Single instance objects
         self.mainGameKeys = Pin.AllKeyStates()
+        self.masterClock = Tim.MasterClock(0)
+
 
     def TickEverything(self) -> None:
         self.mainGameKeys.TickAllKeys()
+        self.masterClock.TickMasterClock()

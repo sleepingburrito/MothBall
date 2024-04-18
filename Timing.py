@@ -46,3 +46,50 @@ class MasterClock:
 
     def MasterClockToMs(self) -> float:
        return TicksToMilliseconds(self.masterTickTimer)
+    
+   
+
+#timers
+#================
+class Timer:
+
+   def __init__(self, lengthInMs: float) -> None:
+      self.Set(lengthInMs)
+
+   def TimeLimit(timeInTicks: int) -> int:
+      return Tools.ClampValue(timeInTicks, 0, Sv.TIMER_MAX_TICKS)
+
+   def Set(self, lengthInMs: float) -> None:
+      self.ResetAllValues()
+      self._timerEndTicks = self.TimeLimit(MillisecondsToTicks(lengthInMs))
+
+   #reset start and end values to zero
+   def ResetAllValues(self) -> None:
+      self._timerEndTicks = 0
+      self._timerStateTicks = 0
+
+   def Reset(self) -> None:
+      self._timerStateTicks = 0
+
+   #Set the timer to the end time.
+   def EndNow(self) -> None:
+      self._timerStateTicks = self._timerEndTicks
+
+   #True if the timer is passed, false if not.
+   def IsDone(self) -> bool:
+      return self._timerStateTicks >= self._timerEndTicks
+
+   #Run each tick to update the timer.
+   def Tick(self) -> None:
+      self._timerStateTicks += 1 if self._timerStateTicks < Sv.TIMER_MAX_TICKS else 0
+
+   def GetMillisecondsPassed(self) -> float:
+      return TicksToMilliseconds(self._timerStateTicks)
+
+   #Return range 0.0 - 1.0+, 0 is not start, 1+ is done.
+   #1.0 or more is considered done.
+   def PercentageCompleted(self) -> float:
+      if self._timerEndTicks == 0:
+         return 1
+      else:
+         return self._timerStateTicks / self._timerEndTicks
