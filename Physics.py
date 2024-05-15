@@ -1,8 +1,8 @@
 #main rectangle tools and physics
 import Tools as Tool
 import StaticValues as Sv
+import math
 import pygame
-
 
 
 
@@ -20,6 +20,9 @@ class box:
 
         self._xCheckpoint:float = 0
         self._yCheckpoint:float = 0
+
+        #axis-aligned bounding box truncated to whole game units.
+        self._AABBTrunc: tuple[int,int,int,int] = [self._x, self._y, self._x + self._width, self._y + self._height]
 
         #vectors
         self._xAcceleration:float = 0
@@ -40,12 +43,14 @@ class box:
     def x(self, input: float):
         self._x = Tool.ClampValue(input, Sv.GU_ROOM_X, Sv.GU_ROOM_WIDTH)
         self._right = self.x + self.width
+        self.UpdateSelfAABB()
     @property #left
     def left(self) -> float:
         return self.x
     @left.setter
     def left(self, input: float):
         self.x = input
+        self.UpdateSelfAABB()
     @property #width
     def width(self) -> float:
         return self._width
@@ -53,12 +58,14 @@ class box:
     def width(self, input: float):
         self._width = input
         self._right = self.x + self.width
+        self.UpdateSelfAABB()
     @property #rigth
     def rigth(self) -> float:
         return self._right
     @rigth.setter
     def right(self, input: float):
         self.x = input - self.width
+        self.UpdateSelfAABB()
 
     #y axis
     @property #y
@@ -67,13 +74,15 @@ class box:
     @y.setter
     def y(self, input: float):
         self._y = Tool.ClampValue(input, Sv.GU_ROOM_Y, Sv.GU_ROOM_HEIGHT)
-        self._bottom = self.y + self.height  
+        self._bottom = self.y + self.height
+        self.UpdateSelfAABB()
     @property #top
     def top(self) -> float:
         return self.y
     @top.setter
     def top(self, input: float):
         self.y = input
+        self.UpdateSelfAABB()
     @property #heigth
     def heigth(self) -> float:
         return self._heigth
@@ -81,17 +90,35 @@ class box:
     def heigth(self, input: float):
         self._heigth = input
         self._bottom = self.y + self.heigth
+        self.UpdateSelfAABB()
     @property #bottom
     def bottom(self) -> float:
         return self._bottom
     @bottom.setter
     def bottom(self, input: float):
         self.y = input - self.height
+        self.UpdateSelfAABB()
 
     #axis functions
     def SetXYrelative(self, xy: tuple[float,float]) -> None:
         self.x += xy[0]
         self.y += xy[1]
+
+    #bounding box
+    #update bounding box to own cords.
+    def UpdateSelfAABB(self) -> None:
+        self._AABBTrunc = [math.trunc(self.left), math.trunc(self.top), math.trunc(self.right), math.trunc(self.bottom)]
+
+    @property
+    def boxAABB(self) -> tuple[int, int, int, int]:
+        return self._AABBTrunc
+    @boxAABB.setter
+    def boxAABB(self, boxNew: tuple[int, int, int, int]):
+        self.left = boxNew[0]
+        self.top = boxNew[1]
+        self.rigth = boxNew[2]
+        self.bottom = boxNew[3]
+        self._AABBTrunc = boxNew
 
 
     #checkpoint
@@ -120,7 +147,7 @@ class box:
     @property #y Acceleration
     def yAcceleration(self) -> float:
         return self._yAcceleration
-    @yCheckpoint.setter
+    @yAcceleration.setter
     def yAcceleration(self, input: float):
         self._yAcceleration = Tool.ClampValue(input, -Sv.ACCELERATION_MAX, Sv.ACCELERATION_MAX)
 
