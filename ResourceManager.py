@@ -12,6 +12,7 @@ class MainResourceManager:
 
     def __init__(self) -> None:
         #Single instance objects
+        print("Initializing MainResourceManager")
         self.mainGameKeys = Pin.AllKeyStates()
         self.masterClock = Tim.MasterClock(0)
 

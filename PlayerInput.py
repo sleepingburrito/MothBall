@@ -56,6 +56,7 @@ class AllKeyStates:
     KeyIn: list[KeyState] = []
 
     def __init__(self) -> None:
+        print("Initializing AllKeyStates")
         self.KeyIn.clear()
         for playerId in Sv.PLAYER_ID:
             #Make list list for each player to store their input
