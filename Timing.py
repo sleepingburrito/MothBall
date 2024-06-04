@@ -86,7 +86,7 @@ class Timer:
    def GetMillisecondsPassed(self) -> float:
       return TicksToMilliseconds(self._timerStateTicks)
 
-   #Return range 0.0 - 1.0+, 0 is not start, 1+ is done.
+   #Return range 0.0 - 1.0+, 0 is not started, 1+ is done.
    #1.0 or more is considered done.
    def PercentageCompleted(self) -> float:
       if self._timerEndTicks == 0:

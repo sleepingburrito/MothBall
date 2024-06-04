@@ -28,6 +28,9 @@ class box:
         self._xAcceleration:float = 0
         self._yAcceleration:float = 0
 
+        self._xVelocity:float = 0
+        self._yVelocity:float = 0
+
         #flags
         self.physics:bool = True
         self.collisionDetection:bool = True 
@@ -165,3 +168,24 @@ class box:
         
     def GetAccelerationTuple(self) -> tuple[float,float]:
         return (self.xAcceleration, self.yAcceleration)
+    
+    
+    #velocity
+    @property #x velocity
+    def xVelocity(self) -> float:
+        return self._xVelocity
+    @xVelocity.setter
+    def xAcceleration(self, input: float):
+        self._xVelocity = Tool.ClampValue(input, -Sv.VELOCITY_MAX, Sv.VELOCITY_MAX)
+    @property #y velocity
+    def yVelocity(self) -> float:
+        return self._yVelocity
+    @yVelocity.setter
+    def yAcceleration(self, input: float):
+        self._yVelocity = Tool.ClampValue(input, -Sv.VELOCITY_MAX, Sv.VELOCITY_MAX)
+
+    #todo: get and set mag and angle, add functions that return which axists its moving on
+
+    def ZeroOutVelocity(self) -> None:
+        self._xVelocity = 0
+        self._yVelocity = 0
