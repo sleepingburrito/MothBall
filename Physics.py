@@ -175,14 +175,36 @@ class box:
     def xVelocity(self) -> float:
         return self._xVelocity
     @xVelocity.setter
-    def xAcceleration(self, input: float):
+    def xVelocity(self, input: float):
         self._xVelocity = Tool.ClampValue(input, -Sv.VELOCITY_MAX, Sv.VELOCITY_MAX)
     @property #y velocity
     def yVelocity(self) -> float:
         return self._yVelocity
     @yVelocity.setter
-    def yAcceleration(self, input: float):
+    def yVelocity(self, input: float):
         self._yVelocity = Tool.ClampValue(input, -Sv.VELOCITY_MAX, Sv.VELOCITY_MAX)
+
+    @property #xy velocity
+    def xyVelocity(self) -> tuple[float,float]:
+        return (self.xVelocity, self.yVelocity)
+    @xyVelocity.setter
+    def xyVelocity(self, input: tuple[float,float]):
+        self.xVelocity = input[0]
+        self.yVelocity = input[1]
+
+    @property #velocity magnitude
+    def velocityMagnitude(self) -> float:
+        return Tool.VectorMagnitude(self.xyVelocity)
+    @velocityMagnitude.setter
+    def velocityMagnitude(self, input: float):
+        self.xyVelocity = Tool.VectorNew(self.velocityAngle, input)
+
+    @property #velocity angle
+    def velocityAngle(self) -> float:
+        return Tool.VectorAngle(self.xyVelocity)
+    @velocityAngle.setter
+    def velocityAngle(self, input: float):
+        self.xyVelocity = Tool.VectorNew(input, self.velocityMagnitude)
 
     #todo: get and set mag and angle, add functions that return which axists its moving on
 
