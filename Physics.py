@@ -207,6 +207,18 @@ class box:
         self.xyVelocity = Tool.VectorNew(input, self.velocityMagnitude)
 
     #todo: get and set mag and angle, add functions that return which axists its moving on
+    def SetVelocityRelativeAddXY(self, xy: tuple[float,float]) -> None:
+        self.xVelocity += xy[0]
+        self.yVelocity += xy[1]
+
+    def SetVelocityRelativeAddAngleMagnitude(self, angleMagnitude: tuple[float,float]) -> None:
+        tmp = Tool.VectorNew(angleMagnitude[0], angleMagnitude[1])
+        self.xVelocity += tmp[0]
+        self.yVelocity += tmp[1]
+
+    def SetVelocityRelativeMultiplyXY(self, xy: tuple[float,float]) -> None:
+        self.xVelocity *= xy[0]
+        self.yVelocity *= xy[1]
 
     def ZeroOutVelocity(self) -> None:
         self._xVelocity = 0
