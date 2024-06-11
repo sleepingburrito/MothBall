@@ -1,4 +1,4 @@
-test if getting direction work
+
 
 work on physics
 test timers

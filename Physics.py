@@ -239,3 +239,22 @@ class box:
     def ZeroOutVelocity(self) -> None:
         self._xVelocity = 0
         self._yVelocity = 0
+
+
+    #physics
+    def TickPhysics(self) -> None:
+        #ground and air friction
+        #wall timers
+        #functions to get wall timers
+        pass
+    
+
+    #overlap
+    def CheckBoxOverlap(self, boxToCheckAABB: tuple[int,int,int,int]) -> bool:
+        return Tool.BoxIsOverlap(self.boxAABB, boxToCheckAABB)
+
+    def CheckPointOverlap(self, pointToCheckXY: tuple[int, int]) -> bool:
+        return Tool.PointInBox(pointToCheckXY, self.boxAABB)
+
+
+    #debug
