@@ -52,7 +52,7 @@ TIMER_MAX_TICKS = math.trunc(TIMER_MAX_VALUE_MILLISECONDS * TICKS_IN_MILLISECOND
 #--ect--
 IS_NON = -1 #Universal for no value.
 
-class DIRECTION(IntEnum):
+class DIRECTION(float, Enum):
     UP = math.radians(180) #aka: top / y
     DOWN = 0 #aka: bottom
     LEFT = math.radians(270) #aka: x
@@ -61,7 +61,13 @@ class DIRECTION(IntEnum):
     DOWN_LEFT = math.radians(315)
     UP_RIGHT = math.radians(135)
     UP_LEFT = math.radians(225)
+    NON = IS_NON
     
+
+class AXIS(IntEnum):
+    X = 0
+    Y = 1
+    NON = IS_NON
 
 #--math--
 

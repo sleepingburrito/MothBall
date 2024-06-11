@@ -33,7 +33,16 @@ class box:
 
         #flags
         self.physics:bool = True
-        self.collisionDetection:bool = True 
+        self.collisionDetection:bool = True
+
+        #timing
+        #how long you have touched that wall
+        #postive is touching and negative is not
+        self._leftWallTimer:int = 0
+        self._topWallTimer:int = 0
+        self._rigthWallTimer:int = 0
+        self._bottomWallTimer:int = 0
+
     #end of ResetAll(self) 
     
 
@@ -138,8 +147,7 @@ class box:
     def yCheckpoint(self, input: float):
         self._yCheckpoint = Tool.ClampValue(input, Sv.GU_ROOM_Y, Sv.GU_ROOM_HEIGHT)
 
-    #todo make a checkpoint reset that will reset the players postions and reset their volcity etc
-        
+
     #Acceleration
     @property #x Acceleration
     def xAcceleration(self) -> float:
@@ -206,7 +214,6 @@ class box:
     def velocityAngle(self, input: float):
         self.xyVelocity = Tool.VectorNew(input, self.velocityMagnitude)
 
-    #todo: get and set mag and angle, add functions that return which axists its moving on
     def SetVelocityRelativeAddXY(self, xy: tuple[float,float]) -> None:
         self.xVelocity += xy[0]
         self.yVelocity += xy[1]
@@ -219,6 +226,15 @@ class box:
     def SetVelocityRelativeMultiplyXY(self, xy: tuple[float,float]) -> None:
         self.xVelocity *= xy[0]
         self.yVelocity *= xy[1]
+
+    def GetVelocityDirectionMoving(self, whichAxis: Sv.AXIS) -> Sv.DIRECTION:
+        speed = self.xyVelocity[whichAxis.value]
+        if speed < 0:
+            return Sv.DIRECTION.RIGHT if Sv.AXIS.X == whichAxis else Sv.DIRECTION.UP
+        elif speed > 0:
+            return Sv.DIRECTION.LEFT if Sv.AXIS.X == whichAxis else Sv.DIRECTION.DOWN
+        else: #if it is zero
+            return Sv.DIRECTION.NON
 
     def ZeroOutVelocity(self) -> None:
         self._xVelocity = 0
