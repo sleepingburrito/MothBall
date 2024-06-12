@@ -14,9 +14,13 @@ class box:
     def ResetAll(self) -> None:
         #locations
         self._x:float = 0
+        self.x = self._x
         self._y:float = 0
+        self.y = self._y
         self._width:float = 1
+        self.width = self._width
         self._height:float = 1
+        self.heigth = self._height
 
         self._xCheckpoint:float = 0
         self._yCheckpoint:float = 0
@@ -38,10 +42,7 @@ class box:
         #timing
         #how long you have touched that wall
         #postive is touching and negative is not
-        self._leftWallTimer:int = 0
-        self._topWallTimer:int = 0
-        self._rigthWallTimer:int = 0
-        self._bottomWallTimer:int = 0
+        self._wallTimers:dict[Sv.DIRECTION, int] = { Sv.DIRECTION.LEFT: 0, Sv.DIRECTION.UP: 0, Sv.DIRECTION.RIGHT: 0, Sv.DIRECTION.DOWN: 0,  }
 
     #end of ResetAll(self) 
     
@@ -56,6 +57,12 @@ class box:
         self._x = Tool.ClampValue(input, Sv.GU_ROOM_X, Sv.GU_ROOM_WIDTH)
         self._right = self.x + self.width
         self.UpdateSelfAABB()
+    @property #x center
+    def xCenter(self) -> float:
+        return self.x + self.width / 2
+    @xCenter.setter
+    def xCenter(self, input: float):
+        self.x = input - self.width / 2
     @property #left
     def left(self) -> float:
         return self.x
@@ -88,6 +95,12 @@ class box:
         self._y = Tool.ClampValue(input, Sv.GU_ROOM_Y, Sv.GU_ROOM_HEIGHT)
         self._bottom = self.y + self.height
         self.UpdateSelfAABB()
+    @property #y center
+    def yCenter(self) -> float:
+        return self.y + self.heigth / 2
+    @yCenter.setter
+    def yCenter(self, input: float):
+        self.y = input - self.heigth / 2
     @property #top
     def top(self) -> float:
         return self.y
