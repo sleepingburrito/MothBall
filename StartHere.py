@@ -11,12 +11,14 @@ print("Game: ", Sv.GAME_NAME, Sv.GAME_VERSION,"Starting Initialization.")
 print("Setting up pygame")
 Pg.init()
 Pg.mixer.init()
-PgScreen = Pg.display.set_mode((Sv.SCREEN_WIDTH, Sv.SCREEN_HEIGTH))
+PgScreenSurface = Pg.display.set_mode((Sv.SCREEN_WIDTH, Sv.SCREEN_HEIGTH))
 PgClock = Pg.time.Clock()
 
 #global variable setup
 keepGameRunning = True
 mainResourceManager = Rm.MainResourceManager()
+
+#debug testing
 
 
 #main game loop
@@ -35,18 +37,22 @@ while keepGameRunning:
     #======================
     mainResourceManager.TickEverything()
 
+    #debug testing tick
 
 
     #main draw
     #======================
     #Clear Screen
-    PgScreen.fill(Sv.DEFAULT_BG_COLOR)
+    PgScreenSurface.fill(Sv.DEFAULT_BG_COLOR)
 
-    
-    #Pygame flip() the display to put your work on screen
-    Pg.display.flip()
-    #limit frame rate
-    PgClock.tick(Sv.TICK_RATE)
+    #main draw
+    mainResourceManager.TickDrawEverything(PgScreenSurface)
+
+    #debug testing draw
+
+    #end draw
+    Pg.display.flip() #Pygame flip() the display to put your work on screen
+    PgClock.tick(Sv.TICK_RATE) #limit frame rate
 
 #exit code
 print("Game: ", Sv.GAME_NAME, Sv.GAME_VERSION,"Exit was successful.") 

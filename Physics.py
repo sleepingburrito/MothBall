@@ -14,13 +14,16 @@ class box:
     def ResetAll(self) -> None:
         #locations
         self._x:float = 0
-        self.x = self._x
         self._y:float = 0
-        self.y = self._y
         self._width:float = 1
-        self.width = self._width
         self._height:float = 1
-        self.heigth = self._height
+        self._right:float = self._x + self._width
+        self._bottom:float = self._y + self._height
+
+        self.x = self._x
+        self.y = self._y
+        self.width = self._width
+        self.height = self._height
 
         self._xCheckpoint:float = 0
         self._yCheckpoint:float = 0
@@ -47,7 +50,7 @@ class box:
     #end of ResetAll(self) 
     
 
-    #x, y, width, heigth, top, bottom, left, right
+    #x, y, width, height, top, bottom, left, right
     #x axis
     @property #x
     def x(self) -> float:
@@ -97,10 +100,10 @@ class box:
         self.UpdateSelfAABB()
     @property #y center
     def yCenter(self) -> float:
-        return self.y + self.heigth / 2
+        return self.y + self.height / 2
     @yCenter.setter
     def yCenter(self, input: float):
-        self.y = input - self.heigth / 2
+        self.y = input - self.height / 2
     @property #top
     def top(self) -> float:
         return self.y
@@ -108,13 +111,13 @@ class box:
     def top(self, input: float):
         self.y = input
         self.UpdateSelfAABB()
-    @property #heigth
-    def heigth(self) -> float:
-        return self._heigth
-    @heigth.setter
-    def heigth(self, input: float):
-        self._heigth = input
-        self._bottom = self.y + self.heigth
+    @property #height
+    def height(self) -> float:
+        return self._height
+    @height.setter
+    def height(self, input: float):
+        self._height = input
+        self._bottom = self.y + self.height
         self.UpdateSelfAABB()
     @property #bottom
     def bottom(self) -> float:
@@ -145,6 +148,9 @@ class box:
         self.bottom = boxNew[3]
         self._AABBTrunc = boxNew
 
+    #returns tuple in SDL box format for drawing
+    def GetPyGamesSdlBoxXYWH(self) -> tuple[int, int, int, int]:
+        return  [math.trunc(self.x), math.trunc(self.y), math.trunc(self.width), math.trunc(self.height)]
 
     #checkpoint
     @property #x checkpoint
@@ -271,3 +277,6 @@ class box:
 
 
     #debug
+    def DebugDrawBox(self, drawToSurface: pygame.surface.SurfaceType) -> None:
+        if Sv.GAME_DEBUG:
+            pygame.draw.rect(drawToSurface, Sv.DEBUG_BOX_COLOR, self.GetPyGamesSdlBoxXYWH(), width = Sv.DEBUG_BOX_WIDTH)
