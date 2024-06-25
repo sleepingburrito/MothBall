@@ -46,8 +46,34 @@ class MasterClock:
 
     def MasterClockToMs(self) -> float:
        return TicksToMilliseconds(self.masterTickTimer)
-    
-   
+
+
+#fps timer
+#================
+class FPStimer:
+
+   def __init__(self) -> None:
+      self.ResetAll()
+
+   def ResetAll(self) -> None:
+      self._fpsTimer = 0
+      self._fpsCount = 0
+      self._fpsLast = 0
+
+   #input: give how long the app has been running in ms.
+   def UpdateTimePassedMs(self, timeRunningMs: int) -> int:
+      if ( abs(timeRunningMs - self._fpsTimer) >= 1_000 ):
+         self._fpsTimer = timeRunningMs
+         self._fpsLast = self._fpsCount
+         self._fpsCount = 0
+      self._fpsCount += 1
+
+   def GetFpsInt(self) -> int:
+      return self._fpsLast
+      
+   def GetFpsStr(self) -> int:
+      return str(self._fpsLast)
+
 
 #timers
 #================

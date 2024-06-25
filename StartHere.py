@@ -2,6 +2,8 @@
 import pygame as Pg
 import StaticValues as Sv
 import ResourceManager as Rm
+import DrawGraphics as Dg
+import Timing as Time
 
 #setup
 #===============
@@ -19,6 +21,8 @@ keepGameRunning = True
 mainResourceManager = Rm.MainResourceManager()
 
 #debug testing
+fpsTestText = Dg.TextHelper(5, 5, "", 15, None)
+fpsTimer = Time.FPStimer()
 
 
 #main game loop
@@ -38,6 +42,11 @@ while keepGameRunning:
     mainResourceManager.TickEverything()
 
     #debug testing tick
+    #=====================
+    #fps counter
+    fpsTimer.UpdateTimePassedMs(Pg.time.get_ticks())
+    fpsTestText.text = fpsTimer.GetFpsStr()
+
 
 
     #main draw
@@ -49,6 +58,8 @@ while keepGameRunning:
     mainResourceManager.TickDrawEverything(PgScreenSurface)
 
     #debug testing draw
+    fpsTestText.DrawTextSurface(PgScreenSurface)
+
 
     #end draw
     Pg.display.flip() #Pygame flip() the display to put your work on screen
