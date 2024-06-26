@@ -20,12 +20,17 @@ class MainResourceManager:
         #players
         self.players = [] #make sure to type hint that this is a list of player types
 
+        #etc
+
         #--test--
         self.testphy = Phy.box()
         self.testphy.x = 100
         self.testphy.y = 150
         self.testphy.width = 50
         self.testphy.height = 100
+
+    #end of init
+    #====================
 
 
     def TickEverything(self) -> None:
@@ -35,7 +40,15 @@ class MainResourceManager:
         #--test--
         self.testphy.TickPhysics()
 
+    #end of TickEverything
+    #====================
+
+
     def TickDrawEverything(self, drawToSurface: Pg.surface.SurfaceType) -> None:
         
         #--test--
         self.testphy.DebugDrawBox(drawToSurface)
+
+
+    #end of TickDrawEverything
+    #====================

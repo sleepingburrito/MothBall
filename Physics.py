@@ -20,6 +20,11 @@ class box:
         self._right:float = self._x + self._width
         self._bottom:float = self._y + self._height
 
+        self._xMin = Sv.GU_ROOM_X
+        self._yMin = Sv.GU_ROOM_Y
+        self._xMax = Sv.GU_ROOM_WIDTH
+        self._yMax = Sv.GU_ROOM_HEIGHT
+
         self.x = self._x
         self.y = self._y
         self.width = self._width
@@ -57,7 +62,7 @@ class box:
         return self._x
     @x.setter
     def x(self, input: float):
-        self._x = Tool.ClampValue(input, Sv.GU_ROOM_X, Sv.GU_ROOM_WIDTH)
+        self._x = self.LimitXaxis(input)
         self._right = self.x + self.width
         self.UpdateSelfAABB()
     @property #x center
@@ -88,6 +93,14 @@ class box:
     def right(self, input: float):
         self.x = input - self.width
         self.UpdateSelfAABB()
+    @property #lmits (min x, max x)
+    def xMinMax(self) -> float:
+        return (self._xMin, self._xMax)
+    @xMinMax.setter
+    def xMinMax(self, input: float):
+        self._xMin = Tool.ClampValue(input[0], Sv.GU_ROOM_X, Sv.GU_ROOM_WIDTH)
+        self._xMax = Tool.ClampValue(input[1], Sv.GU_ROOM_X, Sv.GU_ROOM_WIDTH)
+
 
     #y axis
     @property #y
@@ -95,7 +108,7 @@ class box:
         return self._y
     @y.setter
     def y(self, input: float):
-        self._y = Tool.ClampValue(input, Sv.GU_ROOM_Y, Sv.GU_ROOM_HEIGHT)
+        self._y = self.LimitYaxis(input)
         self._bottom = self.y + self.height
         self.UpdateSelfAABB()
     @property #y center
@@ -126,6 +139,13 @@ class box:
     def bottom(self, input: float):
         self.y = input - self.height
         self.UpdateSelfAABB()
+    @property #lmits (min y, max y)
+    def yMinMax(self) -> float:
+        return (self._yMin, self._yMax)
+    @yMinMax.setter
+    def yMinMax(self, input: float):
+        self._yMin = Tool.ClampValue(input[0], Sv.GU_ROOM_Y, Sv.GU_ROOM_HEIGHT)
+        self._yMax = Tool.ClampValue(input[1], Sv.GU_ROOM_Y, Sv.GU_ROOM_HEIGHT)
 
     #axis functions
     def SetXYrelative(self, xy: tuple[float,float]) -> None:
@@ -152,19 +172,26 @@ class box:
     def GetPyGamesSdlBoxXYWH(self) -> tuple[int, int, int, int]:
         return  [math.trunc(self.x), math.trunc(self.y), math.trunc(self.width), math.trunc(self.height)]
 
+    #Limit helpers: put in x/y and it will return x/y clamped to its min and max value set
+    def LimitXaxis(self, inputX: float) -> float:
+        return Tool.ClampValue(inputX, self._xMin, self._xMax)
+
+    def LimitYaxis(self, inputX: float) -> float:
+        return Tool.ClampValue(inputX, self._yMin, self._yMax)
+
     #checkpoint
     @property #x checkpoint
     def xCheckpoint(self) -> float:
         return self._xCheckpoint
     @xCheckpoint.setter
     def xCheckpoint(self, input: float):
-        self._xCheckpoint = Tool.ClampValue(input, Sv.GU_ROOM_X, Sv.GU_ROOM_WIDTH)
+        self._xCheckpoint = self.LimitXaxis(input)
     @property #y checkpoint
     def yCheckpoint(self) -> float:
         return self._yCheckpoint
     @yCheckpoint.setter
     def yCheckpoint(self, input: float):
-        self._yCheckpoint = Tool.ClampValue(input, Sv.GU_ROOM_Y, Sv.GU_ROOM_HEIGHT)
+        self._yCheckpoint = self.LimitYaxis(input)
 
 
     #Acceleration
@@ -245,6 +272,11 @@ class box:
     def SetVelocityRelativeMultiplyXY(self, xy: tuple[float,float]) -> None:
         self.xVelocity *= xy[0]
         self.yVelocity *= xy[1]
+
+    def SetVelocityRelativeMultiplyXYMagnitude(self, xy: tuple[float,float], magnitudeMult: float) -> None:
+        self.xVelocity *= xy[0]
+        self.yVelocity *= xy[1]
+        self.velocityMagnitude = self.velocityMagnitude * magnitudeMult
 
     def GetVelocityDirectionMoving(self, whichAxis: Sv.AXIS) -> Sv.DIRECTION:
         speed = self.xyVelocity[whichAxis.value]

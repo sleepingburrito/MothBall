@@ -1,8 +1,7 @@
+move fps text to the resorce manager
 work on physics - make sure the gets and sets work
+
 test timers
 Test if the keys work (maybe set bg color depending on key and its state)
-
-work on text and a frame counter
-test making a physics box then test drawing it, add it to MainResourceManager
 
 
