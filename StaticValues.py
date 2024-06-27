@@ -84,12 +84,12 @@ VELOCITY_MAX = 16
 #--friction--
 #Values are in per 1 millisecond, always postive values.
 #How much you want it to go down divided by the time in a tick. Example: Only want to take 0.01% away, so 0.01/MILLISECONDS_IN_TICK = ending value.
-FRICTION_AIR_PERCENTAGE = 1 - (MILLISECONDS_IN_TICK * 0.00025) 
-FRICTION_GROUND_PERCENTAGE = 1 - (MILLISECONDS_IN_TICK * 0.0018)
+FRICTION_AIR_PERCENTAGE = 1 - (MILLISECONDS_IN_TICK * 0.00028)
+FRICTION_GROUND_PERCENTAGE = 1 - (MILLISECONDS_IN_TICK * 0.018)
 
 #--etc--
 GRAVITY_ACCELERATION = MILLISECONDS_IN_TICK * 0.01
-
+VELOCTIY_MIN = 0.01 #if x or y velocity is less than this then round down
 
 #======================
 #player

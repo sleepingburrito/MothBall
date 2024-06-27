@@ -50,6 +50,7 @@ class box:
         #timing
         #how long you have touched that wall
         #postive is touching and negative is not
+        #is in ticks
         self._wallTimers:dict[Sv.DIRECTION, int] = { Sv.DIRECTION.LEFT: 0, Sv.DIRECTION.UP: 0, Sv.DIRECTION.RIGHT: 0, Sv.DIRECTION.DOWN: 0,  }
 
     #end of ResetAll(self) 
@@ -230,13 +231,13 @@ class box:
         return self._xVelocity
     @xVelocity.setter
     def xVelocity(self, input: float):
-        self._xVelocity = Tool.ClampValue(input, -Sv.VELOCITY_MAX, Sv.VELOCITY_MAX)
+        self._xVelocity = Tool.RoundToZero(Tool.ClampValue(input, -Sv.VELOCITY_MAX, Sv.VELOCITY_MAX), Sv.VELOCTIY_MIN)
     @property #y velocity
     def yVelocity(self) -> float:
         return self._yVelocity
     @yVelocity.setter
     def yVelocity(self, input: float):
-        self._yVelocity = Tool.ClampValue(input, -Sv.VELOCITY_MAX, Sv.VELOCITY_MAX)
+        self._yVelocity = Tool.RoundToZero(Tool.ClampValue(input, -Sv.VELOCITY_MAX, Sv.VELOCITY_MAX), Sv.VELOCTIY_MIN)
 
     @property #xy velocity
     def xyVelocity(self) -> tuple[float,float]:
@@ -292,13 +293,59 @@ class box:
         self._yVelocity = 0
 
 
-    #physics
-    def TickPhysics(self) -> None:
-        #ground and air friction
-        #wall timers
-        #functions to get wall timers
-        pass
+    #==physics==
+
+    def _WallPositionCollisionHelper(self, currentPosition: float, isTouchinWall: bool, positionIfInWall: float, directionTimer: Sv.DIRECTION) -> float:
+        #meant to help physics with walls
+        #returns what the postion should be at
+        #also sets the wall timers
+        timerAddValue: int = 0
+        if isTouchinWall:
+            #in/on wall
+            currentPosition = positionIfInWall
+            timerAddValue = 1
+        else:
+            #not on wall
+            timerAddValue = -1
+        #reset the wall timer if wall state changes
+        if Tool.CopySign(self._wallTimers[directionTimer]) != timerAddValue:
+            self._wallTimers[directionTimer] = 0
+        #add what state you are in now
+        self._wallTimers[directionTimer] += timerAddValue
+        #return the new postion
+        return currentPosition
     
+    def _WallVelocityCollisionHelper(self, velocity: float, isHeadingToWall: bool, timerWallValue: int) -> float:
+        #meant to help physics with walls
+        #returns what the Velocity should be at
+        if isHeadingToWall and timerWallValue > 0:
+            velocity = 0
+        return velocity
+
+    def TickPhysics(self) -> None:
+        #Acceleration
+        self.SetVelocityRelativeAddXY((self.xAcceleration, self.yAcceleration))
+        self.ZeroOutAcceleration()
+
+        #velocity
+        #Friction
+        self.velocityMagnitude = self.velocityMagnitude * (Sv.FRICTION_GROUND_PERCENTAGE if self._wallTimers[Sv.DIRECTION.DOWN] >= 0 else Sv.FRICTION_AIR_PERCENTAGE)
+
+        #x/y
+        self.SetXYrelative(self.xyVelocity)
+
+        #walls
+        self.x = self._WallPositionCollisionHelper(self.x, self.x <= self._xMin, self._xMin, Sv.DIRECTION.LEFT)
+        self.right = self._WallPositionCollisionHelper(self.right, self.right >= self._xMax, self._xMax, Sv.DIRECTION.RIGHT)
+        self.y = self._WallPositionCollisionHelper(self.y, self.y <= self._yMin, self._yMin, Sv.DIRECTION.UP)
+        self.bottom = self._WallPositionCollisionHelper(self.bottom, self.bottom >= self._yMax, self._yMax, Sv.DIRECTION.DOWN)
+
+        #wall and velocity
+        self.xVelocity = self._WallVelocityCollisionHelper(self.xVelocity, self.xVelocity < 0, self._wallTimers[Sv.DIRECTION.LEFT])
+        self.xVelocity = self._WallVelocityCollisionHelper(self.xVelocity, self.xVelocity > 0, self._wallTimers[Sv.DIRECTION.RIGHT])
+        self.yVelocity = self._WallVelocityCollisionHelper(self.yVelocity, self.yVelocity < 0, self._wallTimers[Sv.DIRECTION.UP])
+        self.yVelocity = self._WallVelocityCollisionHelper(self.yVelocity, self.yVelocity > 0, self._wallTimers[Sv.DIRECTION.DOWN])
+
 
     #overlap
     def CheckBoxOverlap(self, boxToCheckAABB: tuple[int,int,int,int]) -> bool:
@@ -306,7 +353,6 @@ class box:
 
     def CheckPointOverlap(self, pointToCheckXY: tuple[int, int]) -> bool:
         return Tool.PointInBox(pointToCheckXY, self.boxAABB)
-
 
     #debug
     def DebugDrawBox(self, drawToSurface: pygame.surface.SurfaceType) -> None:

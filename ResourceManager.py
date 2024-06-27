@@ -27,7 +27,8 @@ class MainResourceManager:
         self.testphy.x = 100
         self.testphy.y = 150
         self.testphy.width = 50
-        self.testphy.height = 100
+        self.testphy.height = 40
+        self.testphy.xAcceleration = 8
 
     #end of init
     #====================

@@ -1,5 +1,6 @@
+make a get onwall timers from physics (in ms)
+physics make wall bouce if over treshold (set treshold and bounce amount)
 move fps text to the resorce manager
-work on physics - make sure the gets and sets work
 
 test timers
 Test if the keys work (maybe set bg color depending on key and its state)
