@@ -117,7 +117,8 @@ PLAYER_TIMER_PLACEHOLDER = 0
 PLAYER_WIDTH = 32
 PLAYER_HEIGHT = 64
 PLAYER_MAX_HP = 100
-
+PLAYER_DEFAULT_X = 10
+PLAYER_DEFAULT_Y = 10
 
 #input
 #======================
@@ -144,6 +145,10 @@ class INPUT_ID(IntEnum):
 #======================
 
 
+#game screen state
+#======================
+
+
 
 #graphics
 #======================
@@ -155,3 +160,8 @@ DEBUG_BOX_WIDTH = 1
 DEBUG_SHADOW_COLOR = "blue"
 
 DEFAULT_BG_COLOR = "black"
+
+DEBUG_FPS_X = 5
+DEBUG_FPS_Y = 5
+DEBUG_FPS_SIZE = 15
+DEBUG_FPS_COLOR = "red"

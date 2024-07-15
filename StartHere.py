@@ -21,8 +21,7 @@ keepGameRunning = True
 mainResourceManager = Rm.MainResourceManager()
 
 #debug testing
-fpsTestText = Dg.TextHelper(5, 5, "", 15, None)
-fpsTimer = Time.FPStimer()
+
 
 
 #main game loop
@@ -43,9 +42,6 @@ while keepGameRunning:
 
     #debug testing tick
     #=====================
-    #fps counter
-    fpsTimer.UpdateTimePassedMs(Pg.time.get_ticks())
-    fpsTestText.text = fpsTimer.GetFpsStr()
 
 
 
@@ -57,8 +53,6 @@ while keepGameRunning:
     #main draw
     mainResourceManager.TickDrawEverything(PgScreenSurface)
 
-    #debug testing draw
-    fpsTestText.DrawTextSurface(PgScreenSurface)
 
 
     #end draw

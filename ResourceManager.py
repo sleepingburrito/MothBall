@@ -4,6 +4,9 @@ import pygame as Pg
 import PlayerInput as Pin
 import Timing as Tim
 import Physics as Phy
+import DrawGraphics as Dg
+import StaticValues as Sv
+
 
 class MainResourceManager:
 
@@ -18,28 +21,33 @@ class MainResourceManager:
         self.masterClock = Tim.MasterClock(0)
         
         #players
-        self.players = [] #make sure to type hint that this is a list of player types
+        for players in Sv.PLAYER_ID:
+            pass
+        self.players = []
 
         #etc
+        self.fpsCounterText = Dg.TextHelper(Sv.DEBUG_FPS_X, Sv.DEBUG_FPS_Y, "", Sv.DEBUG_FPS_SIZE, None, Sv.DEBUG_BOX_COLOR)
+        self.fpsTimer = Tim.FPStimer()
 
         #--test--
-        self.testphy = Phy.box()
-        self.testphy.x = 100
-        self.testphy.y = 150
-        self.testphy.width = 50
-        self.testphy.height = 40
-        self.testphy.xAcceleration = 8
+
 
     #end of init
     #====================
 
 
     def TickEverything(self) -> None:
+        #etc
         self.mainGameKeys.TickAllKeys()
         self.masterClock.TickMasterClock()
 
+        #fps display
+        self.fpsTimer.UpdateTimePassedMs(Pg.time.get_ticks())
+        self.fpsCounterText.text = self.fpsTimer.GetFpsStr()
+
+
         #--test--
-        self.testphy.TickPhysics()
+        
 
     #end of TickEverything
     #====================
@@ -47,8 +55,10 @@ class MainResourceManager:
 
     def TickDrawEverything(self, drawToSurface: Pg.surface.SurfaceType) -> None:
         
+        #--etc--
+        self.fpsCounterText.DrawTextSurface(drawToSurface)
+
         #--test--
-        self.testphy.DebugDrawBox(drawToSurface)
 
 
     #end of TickDrawEverything

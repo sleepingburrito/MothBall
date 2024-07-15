@@ -1,8 +1,9 @@
 make a get onwall timers from physics (in ms)
 physics make wall bouce if over treshold (set treshold and bounce amount)
+move box to player object
 move fps text to the resorce manager
 
-test timers
-Test if the keys work (maybe set bg color depending on key and its state)
+make a screen state (so stuff like pause, main menu, gameplay)
+make pause give you a little pause before retuning back to the game
 
 
