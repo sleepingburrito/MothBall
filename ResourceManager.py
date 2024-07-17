@@ -15,16 +15,17 @@ class MainResourceManager:
     pauseGamePlay = False
     
 
-    def __init__(self) -> None:
+    def __init__(self, drawToSurface: Pg.surface.SurfaceType) -> None:
         #Single instance objects
         print("Initializing MainResourceManager")
         self.mainGameKeys = Pin.AllKeyStates()
         self.masterClock = Tim.MasterClock(0)
+        self.surface = drawToSurface
         
         #players
         self.players: list[p.player] = []
         for startintPlayerId in Sv.PLAYER_ID:
-            self.players.append(p.player(startintPlayerId))
+            self.players.append(p.player(startintPlayerId, self.mainGameKeys, self.surface))
         
         #etc
         self.fpsCounterText = Dg.TextHelper(Sv.DEBUG_FPS_X, Sv.DEBUG_FPS_Y, "", Sv.DEBUG_FPS_SIZE, None, Sv.DEBUG_BOX_COLOR)
@@ -69,14 +70,14 @@ class MainResourceManager:
     #====================
 
 
-    def TickDrawEverything(self, drawToSurface: Pg.surface.SurfaceType) -> None:
+    def TickDrawEverything(self) -> None:
         
         #--etc--
-        self.fpsCounterText.DrawTextSurface(drawToSurface)
+        self.fpsCounterText.DrawTextSurface(self.surface)
 
         #draw players
         for drawPlayer in self.players:
-            drawPlayer.Draw(drawToSurface)
+            drawPlayer.Draw()
 
         #--test--
 

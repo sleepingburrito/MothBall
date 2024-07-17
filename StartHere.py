@@ -19,7 +19,7 @@ PgClock = Pg.time.Clock()
 
 #global variable setup
 keepGameRunning = True
-mainResourceManager = Rm.MainResourceManager()
+mainResourceManager = Rm.MainResourceManager(PgScreenSurface)
 
 #debug testing
 
@@ -51,7 +51,7 @@ while keepGameRunning:
     PgScreenSurface.fill(Sv.DEFAULT_BG_COLOR)
 
     #main draw
-    mainResourceManager.TickDrawEverything(PgScreenSurface)
+    mainResourceManager.TickDrawEverything()
 
 
 

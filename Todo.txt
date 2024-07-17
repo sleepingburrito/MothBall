@@ -1,4 +1,5 @@
 work on adding stuff to the player
+ -make player comments look better
 
 make a get onwall timers from physics (in ms)
 physics make wall bouce if over treshold (set treshold and bounce amount)
