@@ -7,8 +7,6 @@ import DrawGraphics as Dg
 import StaticValues as Sv
 
 class player:
-    
-
 
     def __init__(self, playerId: Sv.PLAYER_ID, keyStates: Pin.AllKeyStates, drawToSurface: Pg.surface.SurfaceType) -> None:
         print("Initializing player ", playerId)
@@ -19,9 +17,7 @@ class player:
 
         #testing
 
-
     #end of init
-    #=====================
 
     def ResetAll(self) -> None:
         #resets everything to be like new
@@ -38,12 +34,9 @@ class player:
         self._pbox.width = Sv.PLAYER_WIDTH
         self._pbox.height = Sv.PLAYER_HEIGHT
 
-
-
     #end of ResetAll
-    #=========================
 
-    #controls
+    #==controls==
     def _RestAllKeys(self) -> None:
         #movement
         self.upKey = 0
@@ -90,8 +83,8 @@ class player:
             self.jumpKey = self.keys.KeyIn[self._playerId][Sv.INPUT_ID.JUMP].KeyTime()
         #end of update key
 
-    #controls end
-    #=========================
+    #==controls end==
+
 
     #=======ticks=========
     #tick helpers (internal use only)
@@ -102,24 +95,19 @@ class player:
         
         self._UpdateKeys()
         
-    #end of start tick
-    #=================
-
+    #end of start Tick
 
     def Tick(self) -> None:
         if not self.active:
             return
-        
-    #end of tick
-    #=================
-
+    
+    #end of Tick
 
     def EndTick(self) -> None:
         if not self.active:
             return
-    #end of end tick
-    #=================
     
+    #end of EndTick   
     #=======end of ticks=========
    
     #=======etc=======
@@ -138,4 +126,3 @@ class player:
         if Sv.GAME_DEBUG:
             self._pbox.DebugDrawBox(self.surface)
     #end of end draw
-    #=================
