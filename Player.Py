@@ -8,6 +8,7 @@ import StaticValues as Sv
 
 class player:
 
+    #==init==
     def __init__(self, playerId: Sv.PLAYER_ID, keyStates: Pin.AllKeyStates, drawToSurface: Pg.surface.SurfaceType) -> None:
         print("Initializing player ", playerId)
         self._playerId = playerId
@@ -34,9 +35,9 @@ class player:
         self._pbox.width = Sv.PLAYER_WIDTH
         self._pbox.height = Sv.PLAYER_HEIGHT
 
-    #end of ResetAll
-
+    #==end of init==
     #==controls==
+
     def _RestAllKeys(self) -> None:
         #movement
         self.upKey = 0
@@ -84,9 +85,7 @@ class player:
         #end of update key
 
     #==controls end==
-
-
-    #=======ticks=========
+    #==ticks==
     #tick helpers (internal use only)
     
     def StartTick(self) -> None:
@@ -108,16 +107,16 @@ class player:
             return
     
     #end of EndTick   
-    #=======end of ticks=========
+    #==end of ticks==
    
-    #=======etc=======
+    #==etc==
 
     def IsStunned(self) -> bool:
         #stunned means the player can not use keys to interact
         return False #todo, add what can cause the player to be stunned
 
-    #=======end etc=======
-
+    #==end etc==
+    #==draw==
 
     def Draw(self) -> None:
         if not self.active:
@@ -125,4 +124,5 @@ class player:
         
         if Sv.GAME_DEBUG:
             self._pbox.DebugDrawBox(self.surface)
-    #end of end draw
+    
+    #==draw end==
